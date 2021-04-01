@@ -14,3 +14,14 @@ class LayerDense:
         # calculate output values from inputs, weights, and biases
         # no need to transpose the weights since we initialized it transposed
         self.output = np.dot(inputs, self.weights) + self.biases
+        
+        # store the inputs for the partial derivative during the backwards pass
+        self.inputs = inputs
+        
+    def backward(self, dvalues):
+        # gradients on parameters
+        self.dweights = np.dot(self.inputs.T, dvalues)
+        self.dbiases = np.sum(dvalues, axis=0, keepdims=True)
+        
+        # gradients on values
+        self.dinputs = np.dot(dvalues, self.weights.T)

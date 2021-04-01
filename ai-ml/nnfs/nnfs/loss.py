@@ -19,8 +19,25 @@ class CategoricalCrossEntropy(Loss):
         if len(y_true.shape) == 1:
             confidences = y_pred_clipped[range(samples), y_true]
             
-        # mask value - only for on-hot encoded labels
+        # mask value - only for one-hot encoded labels
         elif len(y_true.shape) == 2:
             confidences = np.sum(y_pred_clipped * y_true, axis=1)
             
         return -np.log(confidences)
+    
+    def backward(self, dvalues, y_true):
+        # number of samples
+        samples = len(dvalues)
+        
+        # number of labels in each sample
+        labels = len(dvalues[0])
+        
+        # if the labels are sparse, turn them into one-hot vector
+        if len(y_true.shape) == 1:
+            y_true = np.eye(labels)[y_true]
+        
+        # compute gradient
+        self.dinputs = -y_true / dvalues
+        # normalize
+        self.dinputs = self.dinputs / samples 
+        

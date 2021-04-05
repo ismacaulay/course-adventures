@@ -2,7 +2,7 @@ import numpy as np
 import nnfs
 from layer import LayerDense
 from activation import ActivationReLU, ActivationSoftmax, ActivationSoftmaxLossCategoricalCrossentropy
-from optimizer import OptimizerSGD
+from optimizer import OptimizerSGD, OptimizerAdaGrad, OptimizerRMSProp, OptimizerAdam
 from loss import CategoricalCrossEntropy
 from nnfs.datasets import spiral_data
 import matplotlib.pyplot as plt
@@ -22,7 +22,12 @@ activation1 = ActivationReLU()
 dense2 = LayerDense(64, 3)
 
 loss_activation = ActivationSoftmaxLossCategoricalCrossentropy()
-optimizer = OptimizerSGD(decay=1e-3, momentum=0.9)
+# optimizer = OptimizerSGD(decay=1e-3, momentum=0.9)
+# optimizer = OptimizerAdaGrad(decay=1e-4)
+# optimizer = OptimizerRMSProp(learning_rate=0.02, decay=1e-5, rho=0.999)
+
+# optimizer = OptimizerAdam(learning_rate=0.02, decay=1e-5) # acc: 0.967, loss: 0.081
+optimizer = OptimizerAdam(learning_rate=0.05, decay=5e-7) # acc 0.967, loss: 0.074
 
 for epoch in range(10001):
     # forward pass through layer 1

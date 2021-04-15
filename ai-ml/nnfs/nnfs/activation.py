@@ -73,3 +73,12 @@ class ActivationSoftmaxLossCategoricalCrossentropy:
         
         # normalize
         self.dinputs = self.dinputs / samples
+        
+        
+class ActivationSigmoid:
+    def forward(self, inputs):
+        self.inputs = inputs
+        self.output = 1 / (1 + np.exp(-inputs))
+        
+    def backward(self, dvalues):
+        self.dinputs = dvalues * (1 - self.output) * self.output
